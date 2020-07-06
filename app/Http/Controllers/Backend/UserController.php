@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
+use App\Restaurant;
 use Spatie\Permission\Models\Role;
 use DB;
 use Hash;
@@ -106,6 +107,12 @@ class UserController extends Controller
         $user->save();
 
         $user->assignRole($request->roles);
+		
+		
+		//create restorent
+		$restaurant = new Restaurant();
+		$restaurant->user_id = $user->id;
+		$restaurant->save();
 
         return response()->json([
             'status' => true,

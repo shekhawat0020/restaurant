@@ -86,6 +86,18 @@
 	<li class="slide">
 		<a class="side-menu__item"  href="{{ route('restaurant-profile') }}" class="slide-item"><i class="side-menu__icon ti-user"></i>Restaurant Profile<a>
 	</li>
+	
+	 <li class="slide">
+            <a class="side-menu__item" data-toggle="slide" href="#"><i class="side-menu__icon fa fa-user"></i><span class="side-menu__label">Category</span><i class="angle fa fa-angle-right"></i></a>
+            <ul class="slide-menu">
+                <li>
+                    <a href="{{ route('category-list') }}" class="slide-item">Category List<a>
+                </li>
+                <li>
+                    <a href="{{ route('category-create') }}" class="slide-item">Create Category<a>
+                </li>
+            </ul>
+        </li>
           
     @endcan
 	

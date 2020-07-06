@@ -38,11 +38,19 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Backend'], function() {
         Route::get('/ajax/users/view/{id}', 'UserController@show')->name('user-view')->middleware(['permission:User View']);
     });
 	
-	//Patient Master
+	// Master
     Route::group(['middleware' => ['permission:Restaurant']], function() {
         Route::get('/restaurant/profile', 'RestaurantController@index')->name('restaurant-profile')->middleware(['permission:Restaurant']);
         Route::post('/restaurant/profile/update', 'RestaurantController@update')->name('restaurant-update')->middleware(['permission:Restaurant']);
-    });
+    
+		//category
+        Route::get('/restaurant/category', 'CategoryController@index')->name('category-list')->middleware(['permission:Restaurant']);
+        Route::get('/restaurant/category/create', 'CategoryController@create')->name('category-create')->middleware(['permission:Restaurant']);
+		
+        Route::post('/restaurant/category/store', 'CategoryController@store')->name('category-save')->middleware(['permission:Restaurant']);
+        Route::get('/restaurant/category/edit/{id}', 'CategoryController@edit')->name('category-edit')->middleware(['permission:Restaurant']);
+        Route::post('/restaurant/category/update/{id}', 'CategoryController@update')->name('category-update')->middleware(['permission:Restaurant']);
+	});
 	
 	
 	
