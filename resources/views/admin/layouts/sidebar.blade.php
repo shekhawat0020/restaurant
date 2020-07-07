@@ -88,13 +88,25 @@
 	</li>
 	
 	 <li class="slide">
-            <a class="side-menu__item" data-toggle="slide" href="#"><i class="side-menu__icon fa fa-user"></i><span class="side-menu__label">Category</span><i class="angle fa fa-angle-right"></i></a>
+            <a class="side-menu__item" data-toggle="slide" href="#"><i class="side-menu__icon fa fa-file"></i><span class="side-menu__label">Category</span><i class="angle fa fa-angle-right"></i></a>
             <ul class="slide-menu">
                 <li>
                     <a href="{{ route('category-list') }}" class="slide-item">Category List<a>
                 </li>
                 <li>
                     <a href="{{ route('category-create') }}" class="slide-item">Create Category<a>
+                </li>
+            </ul>
+        </li>
+		
+	<li class="slide">
+            <a class="side-menu__item" data-toggle="slide" href="#"><i class="side-menu__icon fa fa-list"></i><span class="side-menu__label">Menu</span><i class="angle fa fa-angle-right"></i></a>
+            <ul class="slide-menu">
+                <li>
+                    <a href="{{ route('menu-list') }}" class="slide-item">Menu List<a>
+                </li>
+                <li>
+                    <a href="{{ route('menu-create') }}" class="slide-item">Create Menu<a>
                 </li>
             </ul>
         </li>

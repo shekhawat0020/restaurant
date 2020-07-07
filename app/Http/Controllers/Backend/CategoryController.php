@@ -57,7 +57,7 @@ class CategoryController extends Controller
 	
 	 public function create()
     {
-        $pCategory = Category::where('parent_category', 0)->get();
+        $pCategory = Category::where('parent_category', 0)->where('status', 1)->get();
         return view('admin.category.category-create',compact('pCategory'));
     }
 
@@ -98,7 +98,7 @@ class CategoryController extends Controller
 	public function edit($id)
     {
         $category = Category::find($id);
-        $pCategory = Category::where('parent_category', 0)->where('id', '!=', $id)->get();
+        $pCategory = Category::where('parent_category', 0)->where('status', 1)->where('id', '!=', $id)->get();
         
         return view('admin.category.category-edit',compact('category','pCategory'));
     }

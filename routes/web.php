@@ -50,6 +50,16 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Backend'], function() {
         Route::post('/restaurant/category/store', 'CategoryController@store')->name('category-save')->middleware(['permission:Restaurant']);
         Route::get('/restaurant/category/edit/{id}', 'CategoryController@edit')->name('category-edit')->middleware(['permission:Restaurant']);
         Route::post('/restaurant/category/update/{id}', 'CategoryController@update')->name('category-update')->middleware(['permission:Restaurant']);
+	
+		//menu
+        Route::get('/restaurant/menu', 'MenuController@index')->name('menu-list')->middleware(['permission:Restaurant']);
+        Route::get('/restaurant/menu/create', 'MenuController@create')->name('menu-create')->middleware(['permission:Restaurant']);
+		
+        Route::post('/restaurant/menu/store', 'MenuController@store')->name('menu-save')->middleware(['permission:Restaurant']);
+        Route::get('/restaurant/menu/edit/{id}', 'MenuController@edit')->name('menu-edit')->middleware(['permission:Restaurant']);
+        Route::post('/restaurant/menu/update/{id}', 'MenuController@update')->name('menu-update')->middleware(['permission:Restaurant']);
+	
+	
 	});
 	
 	
