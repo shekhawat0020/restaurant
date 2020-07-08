@@ -89,10 +89,12 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Backend'], function() {
 	
 	
 	
-	 Route::get('qrcode', function () {
-	 return \QrCode::size(250)->generate('XpertPhp.com');
-	});
+	
 
 
 });
+
+ Route::get('/open-restaurant/{id}', function(){
+	 echo 'welcome';
+ });
 
