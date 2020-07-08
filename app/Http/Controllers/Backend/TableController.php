@@ -82,7 +82,7 @@ class TableController extends Controller
         
         $table = new Table();
         $table->table_no = $request->table_no;
-        $table->restaurant_id = $restaurantUserID;
+        $table->restaurant_id = $restaurant->id;
         $table->status = $request->status;
 		$table->save();
 		

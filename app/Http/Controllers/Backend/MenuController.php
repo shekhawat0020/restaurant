@@ -58,7 +58,9 @@ class MenuController extends Controller
 	
 	 public function create()
     {
-        $category = Category::where('status', 1)->get();
+		$restaurantUserID = Auth()->user()->id;
+        $restaurant = Restaurant::where('user_id', $restaurantUserID)->first();
+        $category = Category::where('status', 1)->where('restaurant_id', $restaurant->id)->get();
         return view('admin.menu.menu-create',compact('category'));
     }
 
@@ -112,7 +114,9 @@ class MenuController extends Controller
 	public function edit($id)
     {
         $menu = Menu::find($id);
-        $category = Category::where('status', 1)->get();
+		$restaurantUserID = Auth()->user()->id;
+        $restaurant = Restaurant::where('user_id', $restaurantUserID)->first();
+        $category = Category::where('status', 1)->where('restaurant_id', $restaurant->id)->get();
         
         return view('admin.menu.menu-edit',compact('menu','category'));
     }
