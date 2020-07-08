@@ -110,6 +110,18 @@
                 </li>
             </ul>
         </li>
+		
+	<li class="slide">
+            <a class="side-menu__item" data-toggle="slide" href="#"><i class="side-menu__icon fa fa-table"></i><span class="side-menu__label">Tables</span><i class="angle fa fa-angle-right"></i></a>
+            <ul class="slide-menu">
+                <li>
+                    <a href="{{ route('table-list') }}" class="slide-item">Table List<a>
+                </li>
+                <li>
+                    <a href="{{ route('table-create') }}" class="slide-item">Create Table<a>
+                </li>
+            </ul>
+        </li>
           
     @endcan
 	

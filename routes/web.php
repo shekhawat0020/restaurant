@@ -58,6 +58,16 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Backend'], function() {
         Route::post('/restaurant/menu/store', 'MenuController@store')->name('menu-save')->middleware(['permission:Restaurant']);
         Route::get('/restaurant/menu/edit/{id}', 'MenuController@edit')->name('menu-edit')->middleware(['permission:Restaurant']);
         Route::post('/restaurant/menu/update/{id}', 'MenuController@update')->name('menu-update')->middleware(['permission:Restaurant']);
+		
+		
+		//menu
+        Route::get('/restaurant/table', 'TableController@index')->name('table-list')->middleware(['permission:Restaurant']);
+        Route::get('/restaurant/table/create', 'TableController@create')->name('table-create')->middleware(['permission:Restaurant']);
+		
+        Route::post('/restaurant/table/store', 'TableController@store')->name('table-save')->middleware(['permission:Restaurant']);
+        Route::get('/restaurant/table/edit/{id}', 'TableController@edit')->name('table-edit')->middleware(['permission:Restaurant']);
+        Route::post('/restaurant/table/update/{id}', 'TableController@update')->name('table-update')->middleware(['permission:Restaurant']);
+        Route::get('/qr/{id}', 'TableController@QR')->name('table-qr')->middleware(['permission:Restaurant']);
 	
 	
 	});
@@ -79,7 +89,9 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Backend'], function() {
 	
 	
 	
-	 Route::get('/qr', 'TableController@qr');
+	 Route::get('qrcode', function () {
+	 return \QrCode::size(250)->generate('XpertPhp.com');
+	});
 
 
 });

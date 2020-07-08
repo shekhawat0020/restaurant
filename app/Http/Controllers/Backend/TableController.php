@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Restaurant;
 use App\Category;
 use App\Menu;
+use App\Table;
 use Spatie\Permission\Models\Role;
 use DB;
 use Hash;
@@ -22,26 +23,23 @@ class TableController extends Controller
    
  
 	
-    public function qr(Request $request){
-		
-		 QrCode::size(500)
-            ->format('png')
-            ->generate('ItSolutionStuff.com', public_path('qrcode.png'));
-		
-	}
+    
     public function index(Request $request)
     {
 		$restaurantUserID = Auth()->user()->id;
         $restaurant = Restaurant::where('user_id', $restaurantUserID)->first();
 		
 		if ($request->ajax()) {
-            $data = Menu::where('restaurant_id', $restaurant->id)->latest()->get();
+            $data = Table::where('restaurant_id', $restaurant->id)->latest()->get();
             return Datatables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
                         $btn =' ';
                         if(Auth()->user()->can('Restaurant')){
-                            $btn .= '<a href="'.route("menu-edit", $row->id).'" class="edit btn btn-primary btn-sm">Edit</a>';
+                            $btn .= '<a href="'.route("table-edit", $row->id).'" class="edit btn btn-primary btn-sm">Edit</a>';
+                        }
+						if(Auth()->user()->can('Restaurant')){
+                            $btn .= ' <a target="_blank" href="'.URL::to("/qr/".$row->id).'" class="edit btn btn-primary btn-sm">QR</a>';
                         }
 
                         return $btn;
@@ -49,25 +47,17 @@ class TableController extends Controller
                      ->addColumn('status',  function ($category) {
                         return ($category->status)?'Active':'InActive';
                      })
-					 ->editColumn('category_ids',  function ($data) {
-                         if($data->category_ids){
-                            $titles =   Category::whereIn('id', json_decode($data->category_ids))->pluck('category_title');
-                            return json_decode($titles);
-                         }
-                       
-                     })
                     ->rawColumns(['action'])
                     ->make(true);
         }
       
-        return view('admin.menu.menu');
+        return view('admin.table.table');
     }
 
 	
 	 public function create()
     {
-        $category = Category::where('status', 1)->get();
-        return view('admin.menu.menu-create',compact('category'));
+        return view('admin.table.table-create',compact(''));
     }
 
 	
@@ -75,11 +65,7 @@ class TableController extends Controller
     {
         
         $validator = Validator::make($request->all(), [
-            'category_ids' => 'required',
-            'title' => 'required|regex:/^[\pL\s\-]+$/u',
-            'description' => 'required',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'price' => 'required|numeric',
+            'table_no' => 'required',
             'status' => 'required'
         ]);
 
@@ -90,39 +76,35 @@ class TableController extends Controller
 			]);
         }
 		
-		$imageName = "";
-        if($request->hasFile('image')){
-        $imageName = time().'.'.$request->image->extension();   
-        $request->image->move(public_path('uploads/menu'), $imageName);
-        $imageName = "uploads/menu/".$imageName;
-        }
         
 		$restaurantUserID = Auth()->user()->id;
         $restaurant = Restaurant::where('user_id', $restaurantUserID)->first();
         
-        $menu = new Menu();
-        $menu->title = $request->title;
-        $menu->restaurant_id = $restaurant->id;
-        $menu->category_ids = json_encode($request->category_ids);
-        $menu->description = $request->description;
-        $menu->image = $imageName;
-        $menu->price = $request->price;
-        $menu->status = $request->status;
-		$menu->save();
+        $table = new Table();
+        $table->table_no = $request->table_no;
+        $table->restaurant_id = $restaurantUserID;
+        $table->status = $request->status;
+		$table->save();
+		
+		//create qr
+		//QrCode::size(300)->format('png')->generate(URL::to('open-restaurant/'.$table->id), public_path('uploads/qr/qr-'.$table->id.'.png'));
 
         return response()->json([
             'status' => true,
-            'msg' => 'Menu created successfully'
+            'msg' => 'Table created successfully'
 			]);
 
     }
 	
+	public function QR($id){
+		return \QrCode::size(300)->generate(URL::to('open-restaurant/'.$id));
+	}
+	
 	public function edit($id)
     {
-        $menu = Menu::find($id);
-        $category = Category::where('status', 1)->get();
+        $table = Table::find($id);
         
-        return view('admin.menu.menu-edit',compact('menu','category'));
+        return view('admin.table.table-edit',compact('table'));
     }
 
 	
@@ -130,11 +112,7 @@ class TableController extends Controller
     {
 		
 		$validator = Validator::make($request->all(), [
-            'category_ids' => 'required',
-            'title' => 'required|regex:/^[\pL\s\-]+$/u',
-            'description' => 'required',
-            'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'price' => 'required|numeric',
+            'table_no' => 'required',
             'status' => 'required'
         ]);
 
@@ -145,27 +123,19 @@ class TableController extends Controller
 			]);
         }
         
-		$imageName = "";
-        if($request->hasFile('image')){
-        $imageName = time().'.'.$request->image->extension();   
-        $request->image->move(public_path('uploads/menu'), $imageName);
-        $imageName = "uploads/menu/".$imageName;
-        }
+		
         
-        $menu = Menu::find($id);
-        $menu->title = $request->title;
-        $menu->category_ids = json_encode($request->category_ids);
-        $menu->description = $request->description;
-		if($imageName != ""){
-        $menu->image = $imageName;
-		}
-        $menu->price = $request->price;
-        $menu->status = $request->status;
-		$menu->save();
+        $table = Table::find($id);
+        $table->table_no = $request->table_no;
+        $table->status = $request->status;
+		$table->save();
+		
+		//create qr
+		//QrCode::size(300)->format('png')->generate(URL::to('open-restaurant/'.$table->id), public_path('uploads/qr/qr-'.$table->id.'.png'));
 
         return response()->json([
             'status' => true,
-            'msg' => 'Menu updated successfully'
+            'msg' => 'Table updated successfully'
 			]);
 		
 		

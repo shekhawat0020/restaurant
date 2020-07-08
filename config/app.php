@@ -181,7 +181,7 @@ return [
 
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
-		//SimpleSoftwareIO\QrCode\ServiceProvider::class,
+		SimpleSoftwareIO\QrCode\ServiceProvider::class
 
     ],
 
@@ -238,7 +238,7 @@ return [
         'DataTables' => Yajra\DataTables\Facades\DataTables::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
-		//'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class
+		'QrCode' => SimpleSoftwareIO\QrCode\Facades\QrCode::class
 
     ],
 
