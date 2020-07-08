@@ -1,0 +1,71 @@
+.contentbody{padding:2% 4%;width:100%;height:auto;clear:both;}
+header{width:100%;height:auto;float:left;padding:1% 3%;box-shadow:2px 5px 6px #efefef;}
+.logo{width:100%;height:auto;}
+.logo img{width:27%;}
+
+.heartarea{width:100%;height:auto;text-align:right;}
+.heartarea img{width:7%;}
+
+.foodlist{width:100%;height:auto;border-bottom:1px solid #e6e6e6;padding-bottom:10px;padding-top:2%;}
+.foodlist ul{list-style:none;}
+.foodlist li{display:inline-block;}
+.foodlist li:nth-child(1){width:8%;vertical-align:top;margin-top:7px;}
+.foodlist li:nth-child(2){width:72%;}
+.foodlist li:nth-child(3){width:15%;text-align:center;}
+
+.greenTag span{border:1px solid #09ac63;width:16px;height:16px;display:flex;align-items:center;justify-content:center;border-radius:3px;}
+.greenTag span span{width:8px;height:8px;border-radius:50%;display:inline-block;background:#09ac63;}
+
+.redTag span{border:1px solid #BD0202;width:16px;height:16px;display:flex;align-items:center;justify-content:center;
+ border-radius:3px;}
+.redTag span span{width:8px;height:8px;border-radius:50%;display:inline-block;background:#BD0202;} 
+
+.foodlist ul .text{font-size:14px;color:#222;font-weight:400;word-break:break-all;padding-right:80px;}
+.foodlist ul .text a{color:#222;display:block;font-weight:650;font-size:16px;}
+.foodlist ul .text a:hover{text-decoration:none;}
+.foodlist ul .text a span{background-color:#09ac63;display:inline-block;padding:0px;padding:1px 8px;
+    color:#fff;margin-left:1%;}
+.foodlist ul .text span{font-size:14px;color:#222;font-weight:400;display:block;padding-top:0px;}
+.addnumber{width:100%;height:auto;}
+.addnumber span{padding:6px 18px;border:1px solid #ed2122;border-radius:9px;}
+.addnumber span a{color:#ef3f3a;}
+.addnumber span a:hover{text-decoration:none;}
+.addnumber p{margin:0%;padding-top:8px;font-size:12px;letter-spacing:0.2px;}
+
+.rollsarea{width:100%;height:auto;margin-bottom:6%;}
+.rollsarea h2{font-size:31px;display:inline-block;padding-right:10px;margin-bottom:4%;}
+.rollsarea span{color:#949393;}
+
+/** Hitesh responsive Css **/
+
+
+@media only screen and (max-width: 767px) {
+.rollsarea h2{font-size:22px;}
+.foodlist ul{padding-left:0%;}
+.foodlist ul .text{padding-right:0px;}
+.foodlist li:nth-child(1){vertical-align:middle;margin-top:0%;}
+.foodlist li:nth-child(2){width:61%;}
+.foodlist li:nth-child(3){width:28%;margin-top:3%;text-align:right;}
+.addnumber span{padding:6px 10px;}
+.foodlist{padding-top:4%;}
+.logo img{width:62%;padding:5% 0%;}
+.logorespo{width:70%;display:inline-block;}
+.heratrespo{width:25%;display:inline-block;}
+.heartarea img{width:64%;padding-top:44%;}
+
+
+
+
+}
+
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+.logo img{width:49%;margin:2% 0%;}
+.heartarea img{width:12%;margin-top:7%;}
+.foodlist li:nth-child(1){margin-top:2%;}
+.foodlist ul{padding-left:3%;}
+	
+  }
+
+
+
+
