@@ -76,6 +76,11 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Backend'], function() {
     Route::get('/roles/edit/{id}', 'RolePermissionController@edit')->name('roles-edit');
     Route::post('/roles/update/{id}', 'RolePermissionController@update')->name('roles-update');
     Route::get('/ajax/roles/view/{id}', 'RolePermissionController@show')->name('roles-view');
+	
+	
+	
+	 Route::get('/qr', 'TableController@qr');
 
 
 });
+
