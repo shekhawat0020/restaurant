@@ -6,7 +6,7 @@
 <title>Food Menu</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="{{ asset('front/css/style.css') }}">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 
@@ -40,109 +40,38 @@ $(document).ready(function(){
 <header>
 
 <div class="col-md-6 col-sm-6 col-xs-6 no-pad float-left logorespo">
-<div class="logo"><a href="#"><img src="img/logo.png" alt="logo"></img></a></div>
+<div class="logo"><a href="#"><img src="{{ asset('front/img/logo.png') }}" alt="logo"></img></a></div>
 </div>
 
 <div class="col-md-6 col-sm-6 col-xs-6 no-pad float-right heratrespo">
-<div class="heartarea"><a href="#"><img src="img/heart.png" alt="heart"></img></a></div>
+<div class="heartarea"><a href="#"><img src="{{ asset('front/img/heart.png') }}" alt="heart"></img></a></div>
 </div>
 <div class="clearfix"></div>
 
 </header>
 
 <div class="contentbody">
-
+@foreach($restaurant->category as $cat)
 <div class="rollsarea">
-<h2>Kathi Rools</h2><span>(10 Items)</span>
+<h2>{{$cat->category_title}}</h2><span>({{count($cat->menu)}} Items)</span>
 
+@foreach($cat->menu as $menu)
 <div class="foodlist">
 <ul>
 <li class="greenTag"><span><span></span></span></li>
-<li class="text"><a href="#">Chatpata Aaloo Roll</a><span><i class="fa fa-inr" aria-hidden="true"></i> 50.00</span></li>
+<li class="text">
+<a href="#">{{$menu->title}}</a>
+<p>{{$menu->description}}</p>
+<span><i class="fa fa-inr" aria-hidden="true"></i>{{$menu->price}}</span></li>
 <li class="addnumber"><span><a href="#">Add +</a></span> <br><p>Customize</p></li>
 </ul>
+@endforeach
 </div>
 
-<div class="foodlist">
-<ul>
-<li class="greenTag"><span><span></span></span></li>
-<li class="text"><a href="#">Chatpata Aaloo Roll</a><p>Tender boneless chicken stuffing prepared in desi style.</p><span><i class="fa fa-inr" aria-hidden="true"></i> 50.00</span></li>
-<li class="addnumber"><span><a href="#">Add +</a></span> <br><p>Customize</p></li>
-</ul>
-</div>
-
-<div class="foodlist">
-<ul>
-<li class="redTag"><span><span></span></span></li>
-<li class="text"><a href="#">Chatpata Aaloo Roll <span>NEW</span></a><span><i class="fa fa-inr" aria-hidden="true"></i> 50.00</span></li>
-<li class="addnumber"><span><a href="#">Add +</a></span> <br><p>Customize</p></li>
-</ul>
-</div>
-
-<div class="foodlist">
-<ul>
-<li class="greenTag"><span><span></span></span></li>
-<li class="text"><a href="#">Chatpata Aaloo Roll</a><p>Tender boneless chicken stuffing prepared in desi style.</p><span><i class="fa fa-inr" aria-hidden="true"></i> 50.00</span></li>
-<li class="addnumber"><span><a href="#">Add +</a></span> <br><p>Customize</p></li>
-</ul>
-</div>
-
-<div class="foodlist">
-<ul>
-<li class="redTag"><span><span></span></span></li>
-<li class="text"><a href="#">Chatpata Aaloo Roll <span>NEW</span></a><span><i class="fa fa-inr" aria-hidden="true"></i> 50.00</span></li>
-<li class="addnumber"><span><a href="#">Add +</a></span> <br><p>Customize</p></li>
-</ul>
-</div>
+@endforeach
 
 </div>
 
-
-
-<div class="rollsarea">
-<h2>Kathi Rools</h2><span>(10 Items)</span>
-
-<div class="foodlist">
-<ul>
-<li class="greenTag"><span><span></span></span></li>
-<li class="text"><a href="#">Chatpata Aaloo Roll <span>NEW</span></a><span><i class="fa fa-inr" aria-hidden="true"></i> 50.00</span></li>
-<li class="addnumber"><span><a href="#">Add +</a></span> <br><p>Customize</p></li>
-</ul>
-</div>
-
-<div class="foodlist">
-<ul>
-<li class="greenTag"><span><span></span></span></li>
-<li class="text"><a href="#">Chatpata Aaloo Roll</a><p>Tender boneless chicken stuffing prepared in desi style.</p><span><i class="fa fa-inr" aria-hidden="true"></i> 50.00</span></li>
-<li class="addnumber"><span><a href="#">Add +</a></span> <br><p>Customize</p></li>
-</ul>
-</div>
-
-<div class="foodlist">
-<ul>
-<li class="redTag"><span><span></span></span></li>
-<li class="text"><a href="#">Chatpata Aaloo Roll</a><span><i class="fa fa-inr" aria-hidden="true"></i> 50.00</span></li>
-<li class="addnumber"><span><a href="#">Add +</a></span> <br><p>Customize</p></li>
-</ul>
-</div>
-
-<div class="foodlist">
-<ul>
-<li class="greenTag"><span><span></span></span></li>
-<li class="text"><a href="#">Chatpata Aaloo Roll <span>NEW</span></a><p>Tender boneless chicken stuffing prepared in desi style.</p><span><i class="fa fa-inr" aria-hidden="true"></i> 50.00</span></li>
-<li class="addnumber"><span><a href="#">Add +</a></span> <br><p>Customize</p></li>
-</ul>
-</div>
-
-<div class="foodlist">
-<ul>
-<li class="redTag"><span><span></span></span></li>
-<li class="text"><a href="#">Chatpata Aaloo Roll</a><span><i class="fa fa-inr" aria-hidden="true"></i> 50.00</span></li>
-<li class="addnumber"><span><a href="#">Add +</a></span> <br><p>Customize</p></li>
-</ul>
-</div>
-
-</div>
 
 
 </div>

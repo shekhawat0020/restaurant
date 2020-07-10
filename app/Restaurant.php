@@ -19,5 +19,9 @@ class Restaurant extends Model
         'user_id', 'name', 'address', 'city', 'state', 'banner_image', 'mobile'
     ];
 
+	public function category()
+    {
+        return $this->hasMany('App\Category', 'restaurant_id', 'id');
+    }
     
 }

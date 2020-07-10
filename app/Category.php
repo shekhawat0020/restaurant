@@ -18,6 +18,8 @@ class Category extends Model
     protected $fillable = [
         'restaurant_id', 'category_title', 'parent_category', 'status'
     ];
+	
+	
 
     
 }

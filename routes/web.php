@@ -94,7 +94,5 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Backend'], function() {
 
 });
 
- Route::get('/open-restaurant/{id}', function(){
-	 echo 'welcome';
- });
+ Route::get('/open-restaurant/{id}', 'HomeController@index');
 
