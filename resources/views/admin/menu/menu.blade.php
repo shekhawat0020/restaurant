@@ -71,6 +71,7 @@
     <script type="text/javascript">
         $(function () {
             
+		$.fn.dataTable.ext.errMode = 'none';
             var table = $('.data-table').DataTable({
                 processing: true,
                 serverSide: true,
@@ -79,7 +80,7 @@
                     {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                     {data: 'title', name: 'title'},
                     {data: 'category_ids', name: 'category_ids'},
-                    {data: 'price', name: 'price'},
+                    {data: 'price.price', name: 'price.price'},
                     {data: 'status', name: 'status', orderable: false, searchable: false},                    
                     {data: 'action', name: 'action', orderable: false, searchable: false},
                 ]

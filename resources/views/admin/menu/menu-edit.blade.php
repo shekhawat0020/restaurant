@@ -24,7 +24,8 @@
         <!-- PAGE-HEADER END -->
 
         <!--  Start Content -->
-    
+    <form id="submitForm"  method="post" action="{{route('menu-update', $menu->id)}}">
+		<div class="row" >
         <!-- COL END -->
 							<div class="col-lg-6">
 								<div class="card">
@@ -32,7 +33,6 @@
 										<h3 class="card-title">Menu Forms</h3>
 									</div>
 									<div class="card-body">
-                                    <form id="submitForm"  method="post" action="{{route('menu-update', $menu->id)}}">
                                     {{csrf_field()}}
 										<div class="form-group">
 											<label class="form-label"> Title *</label>
@@ -60,10 +60,6 @@
                                             <img id="image_select" src="{{ asset(''.$menu->image) }}" style="width:100px">
 										</div>
 										
-										<div class="form-group">
-											<label class="form-label"> Price *</label>
-											<input type="text" class="form-control" name="price" id="price" value="{{$menu->price}}">
-										</div>
                                         			
                                         <div class="form-group">
 											<label class="form-label">Status</label>
@@ -77,11 +73,58 @@
                                             <button type="submit" id="submitButton" class="btn btn-primary float-right"  data-loading-text="<i class='fa fa-spinner fa-spin '></i> Sending..." data-rest-text="Update">Update</button>
                                         
 										</div>
-                                        </form>
+                                       
 									</div>
                                     
 								</div>
-							</div><!-- COL END -->
+								
+						<div class="col-lg-6">
+								<div class="card">
+									<div class="card-header">
+										<h3 class="card-title">Price List</h3>
+									</div>
+									<div class="card-body">
+                                    <table>
+									<tr>
+										<th>Price Title *</th>
+										<th>Price *</th>
+										<th></th>
+									</tr>
+									@foreach($menu->price_list as $price)
+									<tr data-duplicate="dup">
+										<td>
+										<div class="form-group">
+											<input type="text" class="form-control" name="price_title[]" id="price_title" value="{{$price->price_title}}" required>
+										</div>
+										</td>
+										<td>
+										<div class="form-group">
+											<input type="number" class="form-control" name="price[]" id="price" value="{{$price->price}}" required>
+										</div>
+										</td>
+										<td>
+											<button type="button" class="btn btn-primary btn-sm mb-1 addrow" data-duplicate-add="dup">+</button>
+                                            <button type="button" class="btn btn-primary btn-sm mb-1 removerow" data-duplicate-remove="dup">-</button>
+                                                
+										</td>
+									</tr>
+									
+									@endforeach
+									
+									</table>
+                                   
+                                    </div>
+                                        
+									</div>
+                                    
+								</div>
+							
+							
+			</div>
+		</form>
+							
+							
+			</div><!-- COL END -->
         
         <!--  End Content -->
 
@@ -91,6 +134,7 @@
 @stop
 @section('inlinejs')           
 <script src="{{ asset('admin/assets/multiselectbox/js/jquery.multi-select.js') }}"></script> 
+<script src="{{ asset('admin/assets/js/jquery.duplicate.js') }}"></script> 
     <script type="text/javascript">
         
         $(function () { 

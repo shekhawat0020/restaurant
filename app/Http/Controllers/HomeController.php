@@ -36,7 +36,10 @@ class HomeController extends Controller
 			
 		 $restaurant->category->map(function($cat){
 			 
-			 $menu = Menu::where('category_ids', 'like', '%"'.$cat->id.'"%')->where('status', 1)->get();
+			 $menu = Menu::where('category_ids', 'like', '%"'.$cat->id.'"%')
+			 ->with('price_list')
+			 ->with('price')
+			 ->where('status', 1)->get();
 			 $cat->menu = $menu;
 			 return $cat;
 			 
@@ -45,4 +48,16 @@ class HomeController extends Controller
 		//dd($restaurant);
          return view('restaurant', compact('restaurant'));
     }
-}
+
+	
+	public function cartForm($menu_id){
+		$menu = Menu::where('id', $menu_id)
+			 ->with('price_list')->first();
+		$html = view('cartform', compact('menu'))->render();
+		
+		return response()->json([
+            'status' => true,
+            'html' => $html
+			]);
+	}
+	}

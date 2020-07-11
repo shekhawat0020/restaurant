@@ -18,6 +18,16 @@ class Menu extends Model
     protected $fillable = [
         'restaurant_id', 'category_ids', 'title', 'description', 'image', 'price', 'status'
     ];
+	
+	public function price_list()
+    {
+        return $this->hasMany('App\MenuPrice', 'menu_id', 'id');
+    }
+	
+	public function price()
+    {
+        return $this->hasOne('App\MenuPrice', 'menu_id', 'id');
+    }
 
     
 }

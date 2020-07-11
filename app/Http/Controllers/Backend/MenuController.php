@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Restaurant;
 use App\Category;
 use App\Menu;
+use App\MenuPrice;
 use Spatie\Permission\Models\Role;
 use DB;
 use Hash;
@@ -27,7 +28,7 @@ class MenuController extends Controller
         $restaurant = Restaurant::where('user_id', $restaurantUserID)->first();
 		
 		if ($request->ajax()) {
-            $data = Menu::where('restaurant_id', $restaurant->id)->latest()->get();
+            $data = Menu::where('restaurant_id', $restaurant->id)->with('price')->latest()->get();
             return Datatables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
@@ -73,7 +74,8 @@ class MenuController extends Controller
             'title' => 'required|regex:/^[\pL\s\-]+$/u',
             'description' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'price' => 'required|numeric',
+            'price_title.*' => 'required',
+            'price.*' => 'required|numeric',
             'status' => 'required'
         ]);
 
@@ -100,9 +102,20 @@ class MenuController extends Controller
         $menu->category_ids = json_encode($request->category_ids);
         $menu->description = $request->description;
         $menu->image = $imageName;
-        $menu->price = $request->price;
         $menu->status = $request->status;
 		$menu->save();
+		
+		// add price list
+		$price_title = $request->price_title;
+		$price = $request->price;
+		foreach($price_title as $key=>$title){
+			$p = new MenuPrice();
+			$p->price_title = $title;
+			$p->price = $price[$key];
+			$p->menu_id = $menu->id;
+			$p->save();
+			
+		}
 
         return response()->json([
             'status' => true,
@@ -113,7 +126,10 @@ class MenuController extends Controller
 	
 	public function edit($id)
     {
-        $menu = Menu::find($id);
+        $menu = Menu::where('id',$id)
+		->with('price_list')
+		->first();
+		
 		$restaurantUserID = Auth()->user()->id;
         $restaurant = Restaurant::where('user_id', $restaurantUserID)->first();
         $category = Category::where('status', 1)->where('restaurant_id', $restaurant->id)->get();
@@ -130,7 +146,8 @@ class MenuController extends Controller
             'title' => 'required|regex:/^[\pL\s\-]+$/u',
             'description' => 'required',
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'price' => 'required|numeric',
+            'price_title.*' => 'required',
+            'price.*' => 'required|numeric',
             'status' => 'required'
         ]);
 
@@ -155,9 +172,21 @@ class MenuController extends Controller
 		if($imageName != ""){
         $menu->image = $imageName;
 		}
-        $menu->price = $request->price;
         $menu->status = $request->status;
 		$menu->save();
+		
+		// update price list
+		MenuPrice::where('menu_id', $menu->id)->delete();
+		$price_title = $request->price_title;
+		$price = $request->price;
+		foreach($price_title as $key=>$title){
+			$p = new MenuPrice();
+			$p->price_title = $title;
+			$p->price = $price[$key];
+			$p->menu_id = $menu->id;
+			$p->save();
+			
+		}
 
         return response()->json([
             'status' => true,
@@ -169,5 +198,6 @@ class MenuController extends Controller
 
 
 
+	
     
 }
