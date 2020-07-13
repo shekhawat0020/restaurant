@@ -9,6 +9,15 @@
 <link rel="stylesheet" href="{{ asset('front/css/style.css') }}">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<style>
+.alert-messages-box {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 399px;
+    z-index: 9999;
+}
+</style>
 
 <script>
 $(document).ready(function(){
@@ -25,11 +34,7 @@ $(document).ready(function(){
 
 
 
-$(document).ready(function(){
-  $(".logo").click(function(){
-    $(".placecartlist").addClass("showcart");
-  });
-});
+
 </script>
 
 </head>
@@ -84,83 +89,123 @@ $(document).ready(function(){
 
 <div class="placecartlist">
 
-<div class="orderbox">
-<ul>
-<li><span>Order by</span><h2>9876 543 210</h2></li>
-<li><button>Add More Items</button></li>
-</ul>
-</div>
-
-<div class="cartpadding">
-
-<div class="topheadcart">
-<div class="col-md-12 col-sm-12 col-xs-12 no-pad float-left">
-
-<div class="foodinstruction">
-<ul>
-<li><h2>Add Instructions</h2><p>Any special instructions you want to share with restaurant.</p>
-</li>
-
-</ul>
-
-</div>
-</div>
-
 
 </div>
 
-<div class="customcart">
-<ul>
-<li class="greenTag"> <span><span></span></span></li>
-<li>Mix Veg Noodles (Half)<p>Addon option : Red Sauce</p></li>
-<li class="cartmore"><ul>
-<li><span><a href="#"><i class="fa fa-minus" aria-hidden="true"></i></a></span></li>
-<li><input type="text" alt="" name="" class="cartnumber"></li>
-<li><span><a href="#"><i class="fa fa-plus" aria-hidden="true"></i></a></span></li>
-</ul><p><i class="fa fa-inr" aria-hidden="true"></i> 60.00</p></li>
-</ul>
-<ul>
-<li class="greenTag"> <span><span></span></span></li>
-<li>Mix Veg Noodles<p>Addon option : Red Sauce</p></li>
-<li class="cartmore"><ul>
-<li><span><a href="#"><i class="fa fa-minus" aria-hidden="true"></i></a></span></li>
-<li><input type="text" alt="" name="" class="cartnumber"></li>
-<li><span><a href="#"><i class="fa fa-plus" aria-hidden="true"></i></a></span></li>
-</ul><p><i class="fa fa-inr" aria-hidden="true"></i> 80.00</p></li>
-</ul>
-</div>
-
-</div>
-
-
-<div class="cartbuttonarea">
-<div class="itemnumber">
-<span>5 Items</span>
-<h2><i class="fa fa-inr" aria-hidden="true"></i> 80</h2>
-</div>
-
-<div class="placecart">
-<p><a href="#">Place Order</a></p>
-</div>
-
-
-</div>
-
-</div>
+<div class="alert-messages-box">
+        
+    </div>
 <script>
 $(document).ready(function(){
 $('.cartform').click(function(){
 	menuid = $(this).data('id');
 	$('.opencartlist').html('<p>Loading.......</p>');
 	$.ajax({
-		url: '{{route('cart-form', '')}}/'+menuid,
+		url: '{{URL::to("/ajax/get-cart-form")}}/'+{{$table_id}}+'/'+menuid,
 		type: 'GET', 
 		success: function(data){
 			$('.opencartlist').html(data.html);
 		}
 	});
 });
+
+
+$(".logo").click(function(){
+    $(".placecartlist").addClass("showcart");
+	
+	$('.placecartlist').html('<p>Loading.......</p>');
+	$.ajax({
+		url: '{{URL::to("/ajax/my-order")}}/'+{{$table_id}},
+		type: 'GET', 
+		success: function(data){
+			$('.placecartlist').html(data.html);
+		}
+	});
+ });
+
+
+
+$(document).on('click','#additem',function(){
+	$('#product_qantity').val(parseInt($('#product_qantity').val())+1);
+	calculateAmount();
 });
+
+$(document).on('click','#lessitem',function(){
+	if(parseInt($('#product_qantity').val())> 1){
+	$('#product_qantity').val(parseInt($('#product_qantity').val())-1);
+	}
+	calculateAmount();
+});
+
+$(document).on('click', '.product_name', function(){
+	calculateAmount();
+});
+
+
+
+$(document).on('submit','#productForm',function(){	
+            var $this = $('#formButton');
+            buttonLoading('loading', $this);
+            $.ajax({
+                url: $(document).find('#productForm').attr('action'),
+                type: "POST",
+                processData: false,  // Important!
+                contentType: false,
+                cache: false,
+                data: new FormData($(document).find('#productForm')[0]),
+                success: function(data) {
+                    if(data.status){
+
+                        successMsg('Place Order', 'Order successfully Placed...');
+						$(".opencartlist").removeClass("showcart");
+
+                    }else{
+                        $.each(data.errors, function(fieldName, field){
+                            $.each(field, function(index, msg){
+							   errorMsg('Place Order',msg);
+                            });
+                        });
+                        
+                    }
+                    buttonLoading('reset', $this);
+                    
+                },
+                error: function() {
+                    errorMsg('Server Error', 'There has been an error, please alert us immediately');
+                    buttonLoading('reset', $this);
+                }
+
+            });
+
+            return false;
+        });
+
+});
+
+function calculateAmount(){
+	prodcut_price = $(document).find("input[name='product']:checked").data('price');
+	total = parseInt($('#product_qantity').val())*parseInt(prodcut_price);
+	$('.totalAmount').html(total);
+}
+
+function buttonLoading(processType, ele){
+        if(processType == 'loading'){
+            ele.html(ele.attr('data-loading-text'));
+            ele.attr('disabled', true);
+        }else{
+            ele.html(ele.attr('data-rest-text'));
+            ele.attr('disabled', false);
+        }
+    }
+
+    function successMsg(heading,message, html = ""){
+        box = $('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong>'+heading+'</strong><hr class="message-inner-separator"><p>'+message+'</p>'+html+'</div>');
+        $('.alert-messages-box').append(box);
+    }
+    function errorMsg(heading,message){
+        box = $('<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong>'+heading+'</strong><hr class="message-inner-separator"><p>'+message+'</p></div>');
+        $('.alert-messages-box').append(box);
+    }
 </script>
 </body>
 </html>

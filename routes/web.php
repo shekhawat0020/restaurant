@@ -95,5 +95,7 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Backend'], function() {
 });
 
  Route::get('/open-restaurant/{table_id}', 'HomeController@index');
- Route::get('/ajax/get-cart-form/{menu_id}', 'HomeController@cartForm')->name('cart-form');
+ Route::get('/ajax/get-cart-form/{table_id}/{menu_id}', 'HomeController@cartForm')->name('cart-form');
+ Route::get('/ajax/my-order/{table_id}', 'HomeController@myorder')->name('my-order');
+ Route::post('/cart-order', 'HomeController@cartOrder')->name('cart-order');
 
