@@ -22,6 +22,11 @@ class Order extends Model
     {
         return $this->hasMany('App\OrderItem', 'order_id', 'id');
     }
+	
+	public function table()
+    {
+        return $this->hasOne('App\Table', 'id', 'table_id');
+    }
 
     
 }

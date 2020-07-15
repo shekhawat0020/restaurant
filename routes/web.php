@@ -69,7 +69,9 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Backend'], function() {
         Route::post('/restaurant/table/update/{id}', 'TableController@update')->name('table-update')->middleware(['permission:Restaurant']);
         Route::get('/qr/{id}', 'TableController@QR')->name('table-qr')->middleware(['permission:Restaurant']);
 	
-	
+		//orders
+		 Route::get('/restaurant/order', 'OrderController@index')->name('order-list')->middleware(['permission:Restaurant']);
+		 Route::get('/restaurant/order/edit/{table_id}', 'OrderController@tableOrder')->name('order-edit')->middleware(['permission:Restaurant']);
 	});
 	
 	
