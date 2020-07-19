@@ -10,7 +10,7 @@ use App\OrderItem;
 use App\MenuPrice;
 use Illuminate\Http\Request;
 use Validator;
-
+use Illuminate\Support\Facades\Session;
 class HomeController extends Controller
 {
     /**
@@ -30,6 +30,7 @@ class HomeController extends Controller
      */
     public function index($table_id)
     { 
+	//dd(Cart::content());
 		$table = Table::find($table_id);
 		$restaurant = Restaurant::where('id', $table->restaurant_id)
 		->with(['category' => function($query){			
@@ -65,7 +66,7 @@ class HomeController extends Controller
 			]);
 	}
 	
-	public function cartOrder(Request $request){
+	public function addToCart(Request $request){
 		
 		$validator = Validator::make($request->all(), [
             'product' => 'required',
@@ -78,7 +79,59 @@ class HomeController extends Controller
 			'status' => false,
 			'errors' => $validator->errors()
 			]);
+		}
+		
+		
+		$itemPrice = MenuPrice::find($request->product);
+		$itemMenu = Menu::find($itemPrice->menu_id);
+		//dd($request->product_qantity);
+		
+		$cart = session()->get('cart');
+		
+		if(!isset($cart[$itemPrice->id])){
+			$cart[$itemPrice->id] = [
+                        "name" => $itemMenu->title,
+                        "quantity" => (int)$request->product_qantity,
+                        "price" => $itemPrice->price,
+                        'price_list_name' => $itemPrice->price_title
+                    ];
+		session()->put('cart', $cart);
+		}else{
+			 return response()->json([
+				'status' => false,
+				'errors' => ['error'=>['Exist'=>'Item already in Cart please update']]
+				]);
+		}
+		
+		//dd($cartItem);
+		
+		return response()->json([
+            'status' => true
+			]);
+		
+	}
+	
+	public function cartOrder(Request $request){
+		
+		$validator = Validator::make($request->all(), [
+            'product.*' => 'required',
+            'table_id' => 'required',
+            'product_qantity.*' => 'required|numeric|min:1',
+        ]);
+
+        if ($validator->fails()) {
+		   return response()->json([
+			'status' => false,
+			'errors' => $validator->errors()
+			]);
         }
+		
+		if(!isset($request->product)){
+					return response()->json([
+					'status' => false,
+					'errors' => ['error'=>['Exist'=>'Cart empty']]
+					]);			
+		}
 		
 		//check order already exist
 		$tableOrder = Order::where('table_id', $request->table_id)->where('closing_status', 1)->first();
@@ -94,19 +147,25 @@ class HomeController extends Controller
 		}else{			
 			$order_id = $tableOrder->id;
 		}
-		
-		$itemPrice = MenuPrice::find($request->product);
-		$itemMenu = Menu::find($itemPrice->menu_id);
-		
-		$orderItem = new OrderItem();
-		$orderItem->order_id = $order_id;
-		$orderItem->price_list_id = $itemPrice->id;
-		$orderItem->menu_id = $itemMenu->id;
-		$orderItem->product_name = $itemMenu->title;
-		$orderItem->price_list_name = $itemPrice->price_title;
-		$orderItem->quantity = $request->product_qantity;
-		$orderItem->price = $itemPrice->price;
-		$orderItem->save();
+		$products = $request->product;
+		$product_qantity = $request->product_qantity;
+
+		foreach($products as $key=>$product){
+			$itemPrice = MenuPrice::find($product);
+			$itemMenu = Menu::find($itemPrice->menu_id);
+			
+			$orderItem = new OrderItem();
+			$orderItem->order_id = $order_id;
+			$orderItem->price_list_id = $itemPrice->id;
+			$orderItem->menu_id = $itemMenu->id;
+			$orderItem->product_name = $itemMenu->title;
+			$orderItem->price_list_name = $itemPrice->price_title;
+			$orderItem->quantity = $product_qantity[$key];
+			$orderItem->price = $itemPrice->price;
+			$orderItem->save();
+		}
+
+		session()->forget('cart');
 		
 		
 		
@@ -126,6 +185,34 @@ class HomeController extends Controller
             'status' => true,
             'html' => $html
 			]);
+	}
+	
+	public function myCart($table_id){
+		
+		$cart = session()->get('cart');
+		//dd($cart);
+		
+		$html = view('mycart', compact('cart','table_id'))->render();
+
+		
+		
+		return response()->json([
+            'status' => true,
+            'html' => $html
+			]);
+	}
+
+	public function removeCartItem($cart_item_id){
+		$cart = session()->get('cart');
+		if(count($cart) == 1){
+			session()->forget('cart');
+		}else{
+			unset($cart[$cart_item_id]);
+			session()->forget('cart');
+			session()->put('cart', $cart);
+		}
+
+		
 	}
 	
 	

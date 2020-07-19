@@ -1,5 +1,5 @@
 
-<form action="{{route('cart-order')}}" id="productForm">
+<form action="{{route('add-to-cart')}}" id="productForm">
 {{csrf_field()}}
 <input type="hidden" name="table_id" value="{{$table_id}}">
 <div class="cartpadding">

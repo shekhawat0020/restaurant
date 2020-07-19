@@ -40,6 +40,13 @@
 											<label class="form-label"> Title *</label>
 											<input type="text" class="form-control" name="title" id="title">
 										</div>
+										<div class="form-group">
+											<label class="form-label">Type</label>
+											<select name="type" id="type" class="form-control custom-select">
+												<option value="1">Veg</option>
+												<option value="0">Non-Veg</option>
+											</select>
+                                        </div>
 
 										<div class="form-group">
 											<label class="form-label"> Description *</label>

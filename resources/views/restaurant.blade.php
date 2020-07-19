@@ -17,6 +17,11 @@
     width: 399px;
     z-index: 9999;
 }
+.customcart {
+    max-height: 290px;
+    overflow: hidden;
+    overflow-y: scroll;
+}
 </style>
 
 <script>
@@ -30,6 +35,7 @@ $(document).ready(function(){
   $(document).on('click', '.closecart', function(){
     $(".opencartlist").removeClass("showcart");
   });
+  
 });
 
 
@@ -115,6 +121,19 @@ $(".logo").click(function(){
 	
 	$('.placecartlist').html('<p>Loading.......</p>');
 	$.ajax({
+		url: '{{URL::to("/ajax/my-cart")}}/'+{{$table_id}},
+		type: 'GET', 
+		success: function(data){
+			$('.placecartlist').html(data.html);
+		}
+	});
+ });
+ 
+ $(".heartarea").click(function(){
+    $(".placecartlist").addClass("showcart");
+	
+	$('.placecartlist').html('<p>Loading.......</p>');
+	$.ajax({
 		url: '{{URL::to("/ajax/my-order")}}/'+{{$table_id}},
 		type: 'GET', 
 		success: function(data){
@@ -156,13 +175,13 @@ $(document).on('submit','#productForm',function(){
                 success: function(data) {
                     if(data.status){
 
-                        successMsg('Place Order', 'Order successfully Placed...');
+                        successMsg('Add to cart', 'Order successfully add to cart...');
 						$(".opencartlist").removeClass("showcart");
 
                     }else{
                         $.each(data.errors, function(fieldName, field){
                             $.each(field, function(index, msg){
-							   errorMsg('Place Order',msg);
+							   errorMsg('Add to cart',msg);
                             });
                         });
                         
@@ -179,6 +198,89 @@ $(document).on('submit','#productForm',function(){
 
             return false;
         });
+    
+
+    //cart
+
+    $(document).on('click','#add-more-item', function(){
+        $(".placecartlist").removeClass("showcart");
+    });
+
+    $(document).on('submit','#placeOrder',function(){	
+            var $this = $('#cartformButton');
+            buttonLoading('loading', $this);
+            $.ajax({
+                url: $(document).find('#placeOrder').attr('action'),
+                type: "POST",
+                processData: false,  // Important!
+                contentType: false,
+                cache: false,
+                data: new FormData($(document).find('#placeOrder')[0]),
+                success: function(data) {
+                    if(data.status){
+
+                        successMsg('Place order', 'Order successfully placed...');
+						$(".placecartlist").removeClass("showcart");
+
+                    }else{
+                        $.each(data.errors, function(fieldName, field){
+                            $.each(field, function(index, msg){
+							   errorMsg('Place order',msg);
+                            });
+                        });
+                        
+                    }
+                    buttonLoading('reset', $this);
+                    
+                },
+                error: function() {
+                    errorMsg('Server Error', 'There has been an error, please alert us immediately');
+                    buttonLoading('reset', $this);
+                }
+
+            });
+
+            return false;
+        });
+
+    $(document).on('click','.lessnumber',function(){
+        $field = $(this).parents('ul').find('.cartnumber');
+        $itemtotal = $(this).parents('ul').parents('ul').find('.itemtotal');
+        unit_price = $(this).parents('ul').find('.unit_price').val();
+        quantity = $field.val();
+        if(quantity > 1){
+            $field.val(parseInt(quantity)-1);
+        }
+
+        $itemtotal.text(parseInt($field.val())*unit_price);
+        carttotal();
+    });
+
+    $(document).on('click','.addnumber',function(){
+        $field = $(this).parents('ul').find('.cartnumber');
+        $itemtotal = $(this).parents('ul').parents('ul').find('.itemtotal');
+        unit_price = $(this).parents('ul').find('.unit_price').val();
+        quantity = $field.val();
+        $field.val(parseInt(quantity)+1);
+        $itemtotal.text(parseInt($field.val())*unit_price);
+        carttotal();
+    });
+
+    $(document).on('click','.removecart', function(){
+        id = $(this).data('id');
+        $('#row-'+id).css('background', 'red');
+        $.ajax({
+            url: '{{route("remove-cart-item", "")}}/'+id,
+            type: 'GET', 
+            success: function(data){
+                $('#row-'+id).remove();
+                carttotal();
+                $countitem = $(document).find('.countitem');
+                count = $countitem.text();
+                $countitem.text(count-1);
+            }
+        });
+    });
 
 });
 
@@ -206,6 +308,13 @@ function buttonLoading(processType, ele){
         box = $('<div class="alert alert-danger"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><strong>'+heading+'</strong><hr class="message-inner-separator"><p>'+message+'</p></div>');
         $('.alert-messages-box').append(box);
     }
+function carttotal(){
+    total = 0;
+    $('.itemtotal').each(function(index, item){
+        total = total+parseInt($(this).text());
+    });
+    $('.carttotal').text(total);
+}
 </script>
 </body>
 </html>

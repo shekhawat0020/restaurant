@@ -71,7 +71,9 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Backend'], function() {
 	
 		//orders
 		 Route::get('/restaurant/order', 'OrderController@index')->name('order-list')->middleware(['permission:Restaurant']);
-		 Route::get('/restaurant/order/edit/{table_id}', 'OrderController@tableOrder')->name('order-edit')->middleware(['permission:Restaurant']);
+         Route::get('/restaurant/order/edit/{table_id}', 'OrderController@tableOrder')->name('order-edit')->middleware(['permission:Restaurant']);
+         Route::get('/restaurant/order/update-item-status/{item_id}/{status}', 'OrderController@updateOrderItemStatus')->name('update-order-item-status')->middleware(['permission:Restaurant']);
+         Route::get('/restaurant/order/complete/{order_id}', 'OrderController@completeOrder')->name('complete-order')->middleware(['permission:Restaurant']);
 	});
 	
 	
@@ -98,6 +100,9 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Backend'], function() {
 
  Route::get('/open-restaurant/{table_id}', 'HomeController@index');
  Route::get('/ajax/get-cart-form/{table_id}/{menu_id}', 'HomeController@cartForm')->name('cart-form');
+ Route::get('/ajax/my-cart/{table_id}', 'HomeController@myCart')->name('my-cart');
  Route::get('/ajax/my-order/{table_id}', 'HomeController@myorder')->name('my-order');
- Route::post('/cart-order', 'HomeController@cartOrder')->name('cart-order');
+ Route::get('/ajax/remove-cart-item/{cart_item_id}', 'HomeController@removeCartItem')->name('remove-cart-item');
+ Route::post('/add-to-cart', 'HomeController@addToCart')->name('add-to-cart');
+ Route::post('/cart-order-place', 'HomeController@cartOrder')->name('cart-order');
 

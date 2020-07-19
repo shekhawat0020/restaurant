@@ -76,6 +76,7 @@ class MenuController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'price_title.*' => 'required',
             'price.*' => 'required|numeric',
+            'type' => 'required',
             'status' => 'required'
         ]);
 
@@ -102,6 +103,7 @@ class MenuController extends Controller
         $menu->category_ids = json_encode($request->category_ids);
         $menu->description = $request->description;
         $menu->image = $imageName;
+        $menu->type = $request->type;
         $menu->status = $request->status;
 		$menu->save();
 		
@@ -148,6 +150,7 @@ class MenuController extends Controller
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'price_title.*' => 'required',
             'price.*' => 'required|numeric',
+            'type' => 'required',
             'status' => 'required'
         ]);
 
@@ -172,6 +175,7 @@ class MenuController extends Controller
 		if($imageName != ""){
         $menu->image = $imageName;
 		}
+        $menu->type = $request->type;
         $menu->status = $request->status;
 		$menu->save();
 		

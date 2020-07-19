@@ -39,6 +39,14 @@
 											<input type="text" class="form-control" name="title" id="title" value="{{$menu->title}}">
 										</div>
 
+                                        <div class="form-group">
+											<label class="form-label">Type</label>
+											<select name="type" id="type" class="form-control custom-select">
+												<option @if($menu->type == 1) selected @endif value="1">Veg</option>
+												<option @if($menu->type == 0) selected @endif value="0">Non-Veg</option>
+											</select>
+                                        </div>
+
 										<div class="form-group">
 											<label class="form-label"> Description *</label>
 											<textarea type="text" class="form-control" name="description" id="description">{{$menu->description}}</textarea>
