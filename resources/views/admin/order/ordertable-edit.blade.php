@@ -101,7 +101,7 @@
                               <th><i class="fa fa-inr" aria-hidden="true"></i> <span id="bill-amount">0</span></th>
                               <th colspan="2" class="text-right">
                                <button type="button" class="btn btn-primary completeorder" data-url="{{route('complete-order', $order->id)}}">Complete Order</button>
-                               <a href=""  class="btn btn-primary" > Print</a>
+                               <a href="{{route('print-order', $order->id)}}" target="_blank"  class="btn btn-primary" > Print</a>
                               </th>
                           </tr>
                       </tfoot>

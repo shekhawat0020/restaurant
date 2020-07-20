@@ -91,6 +91,7 @@ class HomeController extends Controller
 		if(!isset($cart[$itemPrice->id])){
 			$cart[$itemPrice->id] = [
                         "name" => $itemMenu->title,
+                        "type" => $itemMenu->type,
                         "quantity" => (int)$request->product_qantity,
                         "price" => $itemPrice->price,
                         'price_list_name' => $itemPrice->price_title

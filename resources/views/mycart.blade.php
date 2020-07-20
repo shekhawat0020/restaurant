@@ -37,7 +37,7 @@
            
             <ul id="row-{{$key}}">
             
-            <li class="greenTag"> <span><span></span></span></li>
+            <li class="@if($item['type']) greenTag @else redTag @endif"><span><span></span></span></li>
             <li>{{$item['name']}}<p>Addon option : {{$item['price_list_name']}}</p>
             <p><a href="javascript:void(0)" class="removecart" data-id="{{$key}}">Remove</a></p></li>
             <li class="cartmore">

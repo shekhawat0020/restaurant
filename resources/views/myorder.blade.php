@@ -1,7 +1,7 @@
 <div class="orderbox">
 <ul>
 <li><span>Order by</span><h2>9876 543 210</h2></li>
-<li><button>Add More Items</button></li>
+<li><button type="button" id="add-more-item">Add More Items</button></li>
 </ul>
 </div>
 
@@ -25,17 +25,21 @@
 
 <div class="customcart">
 @php $totoal = 0 @endphp
+@if(isset($order->item_list))
 @foreach($order->item_list as $item)
 @php $itemtotal = $item->price*$item->quantity @endphp
 @php $totoal = $totoal+$itemtotal @endphp
 <ul>
-<li class="greenTag"> <span><span></span></span></li>
+<li class="@if($item->type) greenTag @else redTag @endif"><span><span></span></span></li>
 <li>{{$item->product_name}}<p>Addon option : {{$item->price_list_name}}</p></li>
 <li class="cartmore">
 <p><i class="fa fa-inr" aria-hidden="true"></i> {{$itemtotal}} = {{$item->price}}*{{$item->quantity}}</p></li>
 </ul>
 
 @endforeach
+@else
+<p>No order found !</p>
+@endif
 
 </div>
 

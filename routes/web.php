@@ -74,6 +74,7 @@ Route::group(['middleware' => ['auth'], 'namespace' => 'Backend'], function() {
          Route::get('/restaurant/order/edit/{table_id}', 'OrderController@tableOrder')->name('order-edit')->middleware(['permission:Restaurant']);
          Route::get('/restaurant/order/update-item-status/{item_id}/{status}', 'OrderController@updateOrderItemStatus')->name('update-order-item-status')->middleware(['permission:Restaurant']);
          Route::get('/restaurant/order/complete/{order_id}', 'OrderController@completeOrder')->name('complete-order')->middleware(['permission:Restaurant']);
+         Route::get('/restaurant/order/print/{order_id}', 'OrderController@printOrder')->name('print-order')->middleware(['permission:Restaurant']);
 	});
 	
 	

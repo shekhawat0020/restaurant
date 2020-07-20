@@ -108,5 +108,16 @@ class OrderController extends Controller
     }
 
 
+    public function printOrder($order_id){
+		$order = Order::where('id', $order_id)
+			 ->with('item_list')
+			 ->with('table')
+			 ->first();
+			 
+		return view('admin.order.ordertable-print', compact('order'));
+		
+    }
+
+
     
 }

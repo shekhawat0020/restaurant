@@ -69,7 +69,7 @@ $(document).ready(function(){
 @foreach($cat->menu as $menu)
 <div class="foodlist">
 <ul>
-<li class="greenTag"><span><span></span></span></li>
+<li class="@if($menu->type) greenTag @else redTag @endif"><span><span></span></span></li>
 <li class="text">
 <a href="#">{{$menu->title}}</a>
 <p>{{$menu->description}}</p>
